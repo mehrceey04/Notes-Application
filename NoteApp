@@ -1,0 +1,115 @@
+class Note {
+	constructor (author, note_content) {
+		this.author = author;
+		this.note_content = note_content;
+	}
+}
+
+
+class NotesApplication {
+	
+	constructor () {
+		this.notesList = [];
+		
+	}
+
+	
+	create (note) {
+		if (note instanceof Note) {
+			this.notesList.push(note);
+		} else {
+			console.log("This is not a note!")
+		}
+	}
+
+
+	listNotes () {
+		if (this.notesList.length < 1) {
+			console.log("No notes yet! Create new notes.")
+		} else {
+			for (var i = 0; i < this.notesList.length; i++) {
+				console.log("Note ID: " + i);
+				console.log("CONTENT: " + this.notesList[i].note_content);
+				console.log("By Author " + this.notesList[i].author);
+			}
+		}
+		
+	}
+
+
+	getNote (note_id) {
+		var note = this.notesList[note_id]
+		if (note)
+			return note
+		console.log("No note with ID " + "'" + note_id + "'")
+	}
+
+
+
+	searchNote (search_text) {
+		if (this.notesList.length < 1) {
+			console.log("There are no notes in the Application: O Results Found");
+			return;
+		} else {
+			var notesFound = []
+			
+			for (var i = 0; i < this.notesList.length; i++) { 
+				if (this.notesList[i].note_content.indexOf(search_text) > -1) 
+					notesFound.push(this.notesList[i])
+			}
+			
+			if (notesFound.length < 1) {
+				console.log("0 Results Found");
+				return;
+			} else {
+				
+				for (var j = 0; j < notesFound.length; j++) {
+					console.log("Showing results for search " + "'" + search_text + "'");
+					console.log("Note ID: " + j);
+					console.log("CONTENT: " + this.notesList[j].note_content);
+					console.log("By Author " + this.notesList[j].author);
+				}
+			}	
+		}	
+	}
+
+
+	deleteNote (note_id) {
+		var note = this.notesList[note_id]
+		if (note) {
+			this.notesList.pop(note)
+			console.log("Note with ID of " + note_id + " succcessfully deleted!")
+		} else {
+			console.log("Note with ID of " + note_id + " is not in the Application!")
+		}
+	}
+
+	editNote (note_id, new_content) {
+		var note = this.notesList[note_id]
+		if (note) {
+			note.note_content = new_content;
+			console.log("Note with ID of " + note_id + " succcessfully edited!")
+		} else {
+			console.log("Note with ID of " + note_id + " is not in the App Note!")
+		}
+	}
+	
+}
+
+
+var note1 = new Note("Mercy", "This is my first note");
+var note2 = new Note("Mercy", "This is my second note");
+var noteApp = new NotesApplication();
+noteApp.create(note1);
+noteApp.create(note2);
+
+console.log()
+
+noteApp.editNote(0, "I just edited my first note")
+noteApp.editNote(1, "I just edited my second note")
+
+
+
+console.log()
+
+console.log(noteApp.searchNote("edited"));
