@@ -1,115 +1,74 @@
-class Note {
-	constructor (author, note_content) {
+class Note{
+	constructor(author, note_content){
 		this.author = author;
 		this.note_content = note_content;
 	}
 }
 
-
-class NotesApplication {
-	
-	constructor () {
-		this.notesList = [];
-		
+class NoteApp {
+	constructor(){
+		this.notelist = []
 	}
-
 	
-	create (note) {
-		if (note instanceof Note) {
-			this.notesList.push(note);
-		} else {
-			console.log("This is not a note!")
+	create(note){
+		this.notelist.push(note)
+	}
+	
+	print_note(note_id, note) {
+		console.log("Note ID: "+ note_id);
+		console.log(note.note_content)
+		console.log("By Author "+note.author+"\n\n")
+	}
+	
+	listNote() {
+		for(var i=0; i<(this.notelist.length); i++){
+			this.print_note(i, this.notelist[i])
 		}
 	}
-
-
-	listNotes () {
-		if (this.notesList.length < 1) {
-			console.log("No notes yet! Create new notes.")
-		} else {
-			for (var i = 0; i < this.notesList.length; i++) {
-				console.log("Note ID: " + i);
-				console.log("CONTENT: " + this.notesList[i].note_content);
-				console.log("By Author " + this.notesList[i].author);
+	
+	get(note_id){
+		var note = this.notelist[note_id]
+		return note.note_content
+	}
+	
+	search(search_text){
+		var match_note = []
+		for(var i=0; i<(this.notelist.length); i++){
+			var note = this.notelist[i];
+			if(note.note_content.search(search_text) > -1){
+				match_note.push(note)
 			}
 		}
-		
-	}
-
-
-	getNote (note_id) {
-		var note = this.notesList[note_id]
-		if (note)
-			return note
-		console.log("No note with ID " + "'" + note_id + "'")
-	}
-
-
-
-	searchNote (search_text) {
-		if (this.notesList.length < 1) {
-			console.log("There are no notes in the Application: O Results Found");
-			return;
-		} else {
-			var notesFound = []
-			
-			for (var i = 0; i < this.notesList.length; i++) { 
-				if (this.notesList[i].note_content.indexOf(search_text) > -1) 
-					notesFound.push(this.notesList[i])
+		if(match_note.length > 0) {
+			console.log("Showing results for search '"+search_text+"'\n")
+			for(var j=0; j<(match_note.length); j++){
+				this.print_note(j, match_note[j])
 			}
-			
-			if (notesFound.length < 1) {
-				console.log("0 Results Found");
-				return;
-			} else {
-				
-				for (var j = 0; j < notesFound.length; j++) {
-					console.log("Showing results for search " + "'" + search_text + "'");
-					console.log("Note ID: " + j);
-					console.log("CONTENT: " + this.notesList[j].note_content);
-					console.log("By Author " + this.notesList[j].author);
-				}
-			}	
-		}	
-	}
-
-
-	deleteNote (note_id) {
-		var note = this.notesList[note_id]
-		if (note) {
-			this.notesList.pop(note)
-			console.log("Note with ID of " + note_id + " succcessfully deleted!")
 		} else {
-			console.log("Note with ID of " + note_id + " is not in the Application!")
-		}
-	}
-
-	editNote (note_id, new_content) {
-		var note = this.notesList[note_id]
-		if (note) {
-			note.note_content = new_content;
-			console.log("Note with ID of " + note_id + " succcessfully edited!")
-		} else {
-			console.log("Note with ID of " + note_id + " is not in the App Note!")
+			console.log("No Result found")
 		}
 	}
 	
+	delete(note_id){
+		this.notelist.splice(note_id, 1)
+	}
+	
+	edit(note_id, new_content){
+		var note = this.notelist[note_id]
+		note.note_content = new_content
+	}
+
 }
 
+var myNoteApp = new NoteApp();
+var firstNote = new Note('malik', 'this is my first note')
+var secondNote = new Note('mercy', 'A short note application')
+var thirdNote = new Note('bolu', 'A long note application')
+myNoteApp.create(firstNote);
+myNoteApp.create(secondNote);
+myNoteApp.create(thirdNote);
 
-var note1 = new Note("Mercy", "This is my first note");
-var note2 = new Note("Mercy", "This is my second note");
-var noteApp = new NotesApplication();
-noteApp.create(note1);
-noteApp.create(note2);
-
-console.log()
-
-noteApp.editNote(0, "I just edited my first note")
-noteApp.editNote(1, "I just edited my second note")
-
+//myNoteApp.search("short")
+myNoteApp.listNote()
 
 
-console.log()
-
-console.log(noteApp.searchNote("edited"));
